@@ -1,9 +1,13 @@
 This is the starting point before we hit Bayesian . Here we create base models so that Bayesian can use it in later steps
 
 # Step 1
-->First we start with GSF. Three parameters we interested in this notebook are the ubpende , upbendc , ftable of GSF in TALYS models. So we set all of them to 0, run TALYS (input_gsf.txt) and the resulting GSF which we get in the output.dat files is saved as base_strength.txt.
+->First we start with GSF. Three parameters we interested in this notebook are the ubpende , upbendc , ftable of GSF in TALYS models. So we set all of them to (0,0,1) , run TALYS (input_gsf.txt) and the resulting GSF which we get in the output.dat files is saved as master_base_gsf.txt/master_base_gsf.pkl.
 
--> Once we have this we can check whether changing parameters using basic_strength.txt(it gets stored as master_base_gsf.pkl) is same as changing parameters in TALYS using the notebook check_gsf.ipynb
+-> Once we have this we can check whether changing parameters using master_base_gsf.pkl is same as changing parameters in TALYS using the notebook check_gsf.ipynb
+
+1) For this open the 
+
+
 
 # Step 2
 -> We move onto nld. Since we use ldmodel 5 and we will use interpolations in the actual Bayesian. We need to get many ptable values and concatenate . So in TALYS run the script repeat_all.sh with input.txt. This creates a set of output files labeled
