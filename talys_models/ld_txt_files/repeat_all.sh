@@ -12,7 +12,7 @@ do
     echo "======================================"
 
     # Create temporary input
-    sed "s/^ptable 40 100 .*/ptable 40 100 $ptable/" input.txt > temp_input.txt
+    sed "s/^ptable 40 97 .*/ptable 40 97 $ptable/" input.txt > temp_input.txt
 
     # Run TALYS and overwrite output.dat
     talys < temp_input.txt > output.dat
@@ -25,7 +25,7 @@ do
     echo "$header" > "output_${ptable}_p.txt"
 
     awk '
-    /Level density parameters for Z= 40 N= 60 \(100Zr\)/ {
+    /Level density parameters for Z= 40 N= 57 \(97Zr\)/ {
         zr=1
     }
 
@@ -51,7 +51,7 @@ do
     echo "$header" > "output_${ptable}_n.txt"
 
     awk '
-    /Level density parameters for Z= 40 N= 60 \(100Zr\)/ {
+    /Level density parameters for Z= 40 N= 57 \(97Zr\)/ {
         zr=1
     }
 
