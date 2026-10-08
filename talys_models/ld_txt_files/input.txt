@@ -11,7 +11,7 @@ ldmodel 5
 # any strength is okay
 strength 3
 ctable 40 96 0
-ptable 40 96 0.25
+ptable 40 96 0.
 #output
 #
 outdensity y
