@@ -5,7 +5,7 @@ This is the starting point before we hit Bayesian . Here we create base models s
 
 -> Once we have this we can check whether changing parameters using master_base_gsf.pkl is same as changing parameters in TALYS using the notebook check_gsf.ipynb
 
-1) For this open the 
+ For this open the check_gsf.ipynb. Choose some random values if upbende, upbendc and ftable and save it as random_gsf.txt. Then in the construct section , you need to input the same upbende , upbendc and ftable values. If everything goes values construct and talys should look the same.
 
 
 
