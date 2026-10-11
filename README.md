@@ -20,49 +20,47 @@ Bayesian framework using Metropolis–Hastings MCMC to quantify statistical  unc
 
 
 ## Step 0: Data and model preperation.
-For this work, we need both data from the experement and also the default models from TALYS ( Here I have used TALYS 2.0 but one can easily adopt this to other TALYS versions)
+For this work, we need both data from the experement and also the default models from TALYS ( Here I have used TALYS 2.0 but one can easily adopt this to other TALYS versions). First part is to setup the base models for GSF and NLD . Please refer the diectory talys_models and the readme file in it to set up the master_base_gsf.pkl , master_base_ld_n.pkl and master_base_ld_p.pkl.
 
 ### Experimental data
-You need 3 pieces of experimental data : 
-1. The unnormalized experimental GSF of the isotope ( here 100Zr).
-2. The unnormalized experimental NLD of the isotope ( here 100Zr).
-3. The experimental GSF to which you wish to normalize the data to (here 97Zr).
+You need 2 pieces of experimental data : 
+1. The  experimental GSF of the isotope ( here 97Zr).
+2. The experimental NLD of the isotope ( here 97Zr).
 
-These are found in input_data folder as gsf_100Zr_baseline_full.csv, gsf_97Zr.csv and 100Z_ld.csv. The rholev.txt is the known levels of 100Zr at low-excitation enegies. You can replace it with your data in the same format. 
+These are found in input_data folder as gsf_300(6,9).csv,ld_300(6,9).csv for gsf and NLD respectively. You can replace it with your data in the same format. 
 
-### Base Model for GSF and NLD
-1. For GSF , I have chosen strength =3 for E1 component and strengthM1 = 1 with talys parameters upbende=0, ubendc =0 and ftable =1. This constitute the base model on which modifications are done to compare with experimental data . It is stored as a master_base_gsf.pkl file in interp_data. This has the same format as the GSF table obtained from output.dat from TALYS2.0. Here, modifications mean tuning the parameters upbende, upbendc and ftable in TALYS2.0.
-2. For NLD , I have ldmodel =5 with ctable , ptable values both set to 0. This constitute the base model on which modifications are done to compare with experimental data . It is stored as a master_base_ld_p.pkl and master_base_ld_n.pkl file in interp_data corresponding to pos. This has the same format as the     NLD table obtained from output.dat from TALYS2.0 .Here modifications mean tuning the parameters ctable and ptable in TALYS2.0.( Note: this .pkl file is combination of many .pkl files with ptable       varied across multiple values. This is because in the actual MCMC steps , we need interpolation of NLD values and to make    interpolation smooth , many values are required.)
+
 
 ## Step 1: Constraining the γSF within the Bayesian framework
 
-- In this step we get the set of all  tuned model parameters such that they represent the GSF of 97Zr at high energies while after the transformation preserve the structure of the actual experimental data i.e 100Zr. This is how both normalization and uncertainty quantification is done in a single step. More details on the math behind it can be found at in the paper (cite~paper)
+- In this step we get the set of all  tuned model parameters  that represent the GSF of 97Zr.
 
-1. Take the jupyter notebook gsf.ipynb and add both your experimental GSF data ( here gsf_100Zr_baseline_full.csv) and the data to which you want to normalize to ( here gsf_97Zr.csv) in the respective cells
+1. Take the jupyter notebook bayesian to gsf--3-paramters-.ipynb and add both your experimental GSF data ( here gsf_300(6,9).csv) in the respective cells
 2. Also add the master_base_gsf.pkl file in the cell respective cell (Pulling the base data of gsf and interpolation to the experimental energy).
 3. Add the necessary changes to the variables as you go.
-4. In the prior definition ( cell -Likelihood and prior definition starts here)  , add the conditions on prior as necessary. How the priors must be chosen are explained in the paper ....
+4. In the prior definition ( cell -Likelihood and prior definition starts here)  , add the conditions on prior as necessary. How the priors must be chosen are explained in the paper (A.Sebastian et al 2026)
 5. In the cell titled " Running the Full MCMC Setup" , you can spectify the initial starting point of the walker, prior mean , prior standard deviation, and also stepsize of each paramter.
 6. The ideal acceptance percentage is around 30-50 but it can vary from problem to problem.
 7. It is important that in the cell titled "Drawing different chains in MCMC" , you see a convergence of the each individual parameter. This is the proof that the MCMC has finally settled on a set of values . If the trend is such that it is increasing or decreasing , it means that it needs to be tuned again ( like stepsize , prior means, prior widths need to be reconsidered)
-8. If everything goes well , run down the cells where you can see the corner plots and also the bands produced as a result of normalization and uncertainty quantification
+8. If everything goes well , run down the cells where you can see the corner plots and also the bands produced as result of uncertainty quantification
 
-(Note : There is a cell in between that samples from the posterior distribution and saves in outpit_data/gsf_post.txt. This is used later when the best model parameters for NLD is decided.)
+(Note : There is a cell in between that samples from the posterior distribution and saves in file2.txt. This is used later for cross-section calculation.)
    
 ## Step 2: Constraining the NLD within the Bayesian framework
-- For each transformation alpha in the output_data/gsf_post.txt, we find the posterior sampling ctable , ptable of the ldmodel 5.
 
-1. Take the jupyter notebook gsf.ipynb and add both your experimental NLD data ( here 100Z_ld.csv).
+1. Take the jupyter notebook bayesian on ld-2-parameters.ipynb and add  your experimental NLD data ( here ld_300(6,9).csv).
 2. Also add the master_base_ld_p.pkl  and master_base_ld_n.pkl file.
-3. This python file takes time to run and if you are on HPCC , you can use use ld.sbatch to submit it as a SLIURM job . Or one could also start a remote screen in a server and start the job in that screen.
-4. The result is a posterior ensemble of ctable, ptable values stored as output_data/nld_post.npy.
-5. One can use drawing_ld.ipynb and output_data/nld_post.npy to get a band of models.
-   
-## Step 3: Cross-Section and Reaction Rate
+3. In the cell titled " Running the Full MCMC Setup" , you can spectify the initial starting point of the walker, prior mean , prior standard deviation, and also stepsize of each paramter.
+4. The ideal acceptance percentage is around 30-50 but it can vary from problem to problem.
+5. It is important that in the cell titled "Drawing different chains in MCMC" , you see a convergence of the each individual parameter. This is the proof that the MCMC has finally settled on a set of values . If the trend is such that it is increasing or decreasing , it means that it needs to be tuned again ( like stepsize , prior means, prior widths need to be reconsidered)
+8. If everything goes well , run down the cells where you can see the corner plots and also the bands produced as result of uncertainty quantification
+4. The result is a posterior ensemble of ctable, ptable values stored as file1.txt.
 
-1. Add output_data/nld_post.npy and gsf_post.npy to get two files file1.txt and file2.txt in output.dat when you run over the cells.
+   
+## Step 3: Cross-Section
+
+1. The file1.txt( contains NLD parameters) and file2.txt( contains GSF parameters) ae used to find cross-section. 
 2. These are used as input for the TALYS reaction
-3.  There is a .sh file in cross_section_and_reaction_rate/repeat_reaction_rate.sh that takes in file1.txt and file2.txt and gives reaction_rate.txt. You can use reaction_rate.ipynb in same folder to draw the band of reaction rates.
-4.  There is a .sh file in cross_section_and_reaction_rate/repeat_cross_section.sh that takes in file1.txt and file2.txt and gives cross-section.txt. You can use cross-section.ipynb in same folder to draw the band of cross-sections.
+4.  There is a .sh file in cross_section/repeat_cross_section.sh that takes in file1.txt and file2.txt and gives cross-section.txt. You can use cross-section.ipynb in same folder to draw the band of cross-sections.
 
 ### TADA DONE
