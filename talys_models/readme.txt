@@ -18,3 +18,6 @@ output_{ptable_value}_parity.txt in the folder ld_txt_files. ( An example txt fi
 -> Just like for GSF , we can check changing parameter using masterdatabase is same as same as changing paramterer in talys using the notebook check_ld.ipynb.
 
  For this open the check_ld.ipynb. Choose some random values if ctable and ptable and save it as ld_random_p.txt and ld_random_n.txt. Then in the construct section , you need to input the same ctable and ptable values. If everything goes values construct and talys should look the same.
+
+
+ The base_ld_n.pkl and base_ld_p.pkl is made by just ptable=0 and ctable =0.
